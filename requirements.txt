@@ -3,7 +3,6 @@ asttokens==3.0.2
 click==8.5.0
 colorama==0.4.6
 Django==4.2.30
-guincorn
 executing==2.2.1
 ipython==9.17.1
 ipython_pygments_lexers==1.1.1
@@ -25,3 +24,4 @@ traitlets==5.16.1
 typing_extensions==4.16.0
 tzdata==2026.3
 wcwidth==0.8.3
+guincorn
