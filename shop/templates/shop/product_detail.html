@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.title }} - Apple (VN){% endblock %}
+
+{% block extra_css %}
+<style>
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    max-width: 1120px;
+    margin: 40px auto 80px;
+    padding: 0 20px;
+  }
+
+  .detail-gallery {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 28px;
+    padding: 60px 40px;
+    border: 2px solid rgba(0,0,0,0.06);
+  }
+
+  .detail-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .model-selector-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .model-btn {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--apple-border);
+    background: #ffffff;
+    text-align: left;
+    transition: var(--transition-smooth);
+    cursor: pointer;
+  }
+
+  .model-btn:hover {
+    border-color: #999;
+  }
+
+  .model-btn.active {
+    border-color: var(--apple-blue);
+    border-width: 2px;
+    background: rgba(0, 113, 227, 0.03);
+  }
+
+  .model-btn-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--apple-dark-gray);
+  }
+
+  .model-btn-sub {
+    font-size: 12px;
+    color: var(--apple-text-secondary);
+    margin-top: 2px;
+  }
+
+  .engraving-box {
+    background: #fbfbfd;
+    border: 1px dashed var(--apple-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 28px;
+  }
+
+  .engraving-text-preview {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: rgb(255, 255, 255);
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    display: none;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    .detail-layout {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .detail-gallery {
+      position: static;
+      padding: 40px 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 1120px; margin: 0 auto; padding: 24px 20px 0;">
+  <!-- Breadcrumb -->
+  <div style="font-size: 12px; color: var(--apple-text-secondary); margin-bottom: 16px;">
+    <a href="{% url 'shop:index' %}">Trang Chủ</a> &nbsp;›&nbsp;
+    <a href="{% url 'shop:product_list' %}">Ốp Lưng Silicon</a> &nbsp;›&nbsp;
+    <span style="color: var(--apple-text);">{{ product.title }}</span>
+  </div>
+</div>
+
+<div class="detail-layout">
+  <!-- Left: Interactive Gallery with Real Case Images -->
+  <div class="detail-gallery">
+    <div class="case-photo-container">
+      <img 
+        id="mainCaseImage" 
+        class="case-photo-img" 
+        src="{% if product.image_url %}{{ product.image_url }}{% elif active_variant %}{{ active_variant.normalized_image_url }}{% else %}/static/images/cases/case-{{ selected_color.slug }}-back.png{% endif %}"
+        alt="{{ product.title }} - {{ selected_color.name }}"
+      >
+      <!-- Free Engraving text on image -->
+      <div class="engraving-text-preview" id="engravingDisplay" style="bottom: 120px;"></div>
+    </div>
+
+    <!-- Multi-Angle View Switchers (Apple Style) -->
+    <div class="case-gallery-thumbs">
+      <button class="thumb-btn active" id="viewBackBtn" onclick="switchCaseView('back')">
+        📷 Mặt Sau (Camera & Phím Sapphire)
+      </button>
+    </div>
+  </div>
+
+  <!-- Right: Configuration & Checkout Options -->
+  <div class="detail-info">
+    {% if product.badge %}
+      <div style="font-size: 12px; font-weight: 600; color: #bf4800; margin-bottom: 6px;">{{ product.badge }}</div>
+    {% endif %}
+
+    <h1 style="font-size: 32px; font-weight: 700; color: var(--apple-dark-gray); line-height: 1.2; margin-bottom: 8px;">
+      {{ product.title }}
+    </h1>
+
+    <p style="font-size: 16px; color: var(--apple-text-secondary); margin-bottom: 18px;">
+      {{ product.tagline }}
+    </p>
+
+    <div style="font-size: 24px; font-weight: 700; color: var(--apple-dark-gray); margin-bottom: 28px;" id="activePrice">
+      {{ active_variant.formatted_price }}
+    </div>
+
+    <!-- Step 1: Select iPhone Model -->
+    <div style="margin-bottom: 24px;">
+      <label style="display:block; font-size: 14px; font-weight: 600; color: var(--apple-dark-gray); margin-bottom: 10px;">
+        1. Chọn Dòng Máy iPhone: <strong id="activeModelName" style="color:var(--apple-blue);">{{ selected_model.name }}</strong>
+      </label>
+      <div class="model-selector-grid">
+        {% for m in compatible_models %}
+          <div 
+            class="model-btn {% if m.slug == selected_model.slug %}active{% endif %}" 
+            data-model-slug="{{ m.slug }}"
+          >
+            <div class="model-btn-name">{{ m.name }}</div>
+            <div class="model-btn-sub">{{ m.screen_size }}{% if m.has_camera_control %} • Kính Camera Control{% endif %}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Step 2: Select Color Swatch -->
+    <div style="margin-bottom: 24px;">
+      <label style="display:block; font-size: 14px; font-weight: 600; color: var(--apple-dark-gray); margin-bottom: 8px;">
+        2. Chọn Màu Sắc: <strong id="activeColorName" style="color:var(--apple-dark-gray);">{{ selected_color.name }} ({{ selected_color.english_name }})</strong>
+      </label>
+      <div class="swatch-group" style="justify-content: flex-start;">
+        {% for c in colors %}
+          <button 
+            class="color-swatch-btn {% if c.slug == selected_color.slug %}active{% endif %}" 
+            data-color-slug="{{ c.slug }}" 
+            title="{{ c.name }} ({{ c.english_name }})"
+          >
+            <span style="background-color: {{ c.hex_code }};"></span>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Free Apple Engraving (Personalization Preview) -->
+    <div class="engraving-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size: 13px; font-weight: 600; color: var(--apple-dark-gray);">✍ Khắc Tên Miễn Phí (Apple Engraving)</span>
+        <span style="font-size: 11px; color:#34c759; font-weight:600;">Miễn phí</span>
+      </div>
+      <input 
+        type="text" 
+        id="engravingInput" 
+        maxlength="14" 
+        placeholder="Nhập chữ hoặc tên của bạn..." 
+        style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--apple-border); font-size: 13px; outline:none;"
+      >
+      <div style="font-size: 11px; color: var(--apple-text-secondary); margin-top: 6px;">
+        Xem trước dòng chữ của bạn ngay trên mặt lưng ốp silicon phía trên.
+      </div>
+    </div>
+
+    <!-- Camera Control Feature Alert (if iPhone 16) -->
+    <div id="cameraControlNotice" style="background:#eef7ff; border-radius:12px; padding:14px; margin-bottom:24px; font-size:13px; color:#0051a8; display:{% if selected_model.has_camera_control %}block{% else %}none{% endif %};">
+      <strong>✓ Tương thích Nút Điều Khiển Camera:</strong> Tích hợp lớp kính sapphire dẫn điện độ nhạy cực cao cho thế hệ iPhone 16.
+    </div>
+
+    <!-- Add to Bag Button -->
+    <div style="margin-bottom: 24px;">
+      <button id="addToCartMainBtn" class="btn-apple-primary" style="width: 100%; justify-content: center; padding: 16px; font-size: 16px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span>Thêm vào Túi Hàng</span>
+      </button>
+      <div style="text-align: center; margin-top: 8px; font-size: 12px; color: #86868b;">
+        Mã sản phẩm (SKU): <span id="activeSku">{{ active_variant.sku }}</span> • Còn hàng
+      </div>
+    </div>
+
+    <!-- Apple Service Guarantees -->
+    <div style="border-top: 1px solid #e5e5ea; padding-top: 20px; font-size: 13px; color: var(--apple-text-secondary); display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px;">🚚</span>
+        <span><strong>Giao hàng miễn phí:</strong> Nhận hàng tận nhà trên toàn quốc từ 1-3 ngày làm việc.</span>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px;">🔄</span>
+        <span><strong>Đổi trả dễ dàng:</strong> Miễn phí hoàn trả trong vòng 14 ngày nếu chưa sử dụng.</span>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span style="font-size:18px;">🛡</span>
+        <span><strong>Bảo hành Apple 1 năm:</strong> Đảm bảo chính hãng chất lượng cao nhất.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Deep-Dive & Details -->
+<div style="max-width: 1024px; margin: 0 auto; padding: 40px 20px 80px; border-top: 1px solid #e5e5ea;">
+  <div class="section-header" style="margin-top: 20px;">
+    <div class="section-eyebrow">Tổng Quan Sản Phẩm</div>
+    <h2 class="section-title">Mọi chi tiết đều được tinh chỉnh tỉ mỉ</h2>
+  </div>
+
+  <div style="font-size: 16px; line-height: 1.8; color: #424245; max-width: 780px; margin: 0 auto 60px; white-space: pre-line;">
+    {{ product.description }}
+  </div>
+
+  <!-- Tech Specs Table -->
+  <div style="background: var(--apple-light-gray); border-radius: 18px; padding: 32px; max-width: 800px; margin: 0 auto 80px;">
+    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--apple-dark-gray);">Thông Số Kỹ Thuật</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px;">
+      <div><strong>Chất liệu:</strong> Silicon cao cấp chống bám vân tay</div>
+      <div><strong>Lớp lót bên trong:</strong> Sợi Microfiber siêu mềm</div>
+      <div><strong>Công nghệ sạc:</strong> Tương thích MagSafe & Qi2</div>
+      <div><strong>Phím Camera:</strong> Kính Sapphire dẫn điện (iPhone 16)</div>
+      <div><strong>Trọng lượng:</strong> ~32g (nhẹ & bảo vệ góc)</div>
+      <div><strong>Trong hộp gồm:</strong> Ốp Lưng Silicon với MagSafe</div>
+    </div>
+  </div>
+
+  <!-- Customer Reviews & Submission Form -->
+  <div style="max-width: 800px; margin: 0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 28px;">
+      <h3 style="font-size: 24px; font-weight: 700; color: var(--apple-dark-gray);">
+        Đánh Giá Từ Khách Hàng ({{ reviews|length }})
+      </h3>
+      <button class="btn-apple-secondary" onclick="toggleReviewForm()">Viết đánh giá</button>
+    </div>
+
+    <!-- Review Form Modal/Drawer (Toggled) -->
+    <div id="reviewFormContainer" style="display:none; background:#fafafc; border:1px solid var(--apple-border); border-radius:16px; padding:24px; margin-bottom:32px;">
+      <h4 style="font-size:17px; font-weight:600; margin-bottom:14px;">Gửi nhận xét của bạn</h4>
+      <form method="POST" action="{% url 'shop:submit_review' product_id=product.id %}">
+        {% csrf_token %}
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+          <input type="text" name="author_name" placeholder="Họ và tên của bạn" required style="padding:10px; border-radius:8px; border:1px solid #ccc; font-size:13px;">
+          <input type="text" name="phone_model_bought" placeholder="Dòng iPhone bạn dùng (vd: iPhone 16 Pro Max)" required style="padding:10px; border-radius:8px; border:1px solid #ccc; font-size:13px;">
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+          <span style="font-size:13px; font-weight:600;">Số sao:</span>
+          <select name="rating" style="padding:8px; border-radius:8px; border:1px solid #ccc; font-size:13px;">
+            <option value="5">⭐⭐⭐⭐⭐ (5 sao - Xuất sắc)</option>
+            <option value="4">⭐⭐⭐⭐ (4 sao - Tốt)</option>
+            <option value="3">⭐⭐⭐ (3 sao - Trung bình)</option>
+          </select>
+        </div>
+        <input type="text" name="title" placeholder="Tiêu đề đánh giá" required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:13px; margin-bottom:12px;">
+        <textarea name="content" rows="4" placeholder="Cảm nhận chi tiết về độ êm, màu sắc, nút bấm..." required style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:13px; margin-bottom:14px;"></textarea>
+        <div style="display:flex; gap:10px;">
+          <button type="submit" class="btn-apple-primary" style="padding:10px 20px; font-size:13px;">Gửi đánh giá</button>
+          <button type="button" class="btn-apple-secondary" onclick="toggleReviewForm()" style="padding:10px 16px; font-size:13px;">Hủy</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Reviews List -->
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      {% for r in reviews %}
+        <div style="padding:20px; border-radius:12px; border:1px solid #f0f0f2; background:#ffffff;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <div style="color:#ff9500; font-size:14px;">
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= r.rating %}★{% else %}☆{% endif %}
+              {% endfor %}
+            </div>
+            <span style="font-size:12px; color:#86868b;">{{ r.created_at|date:"d/m/Y" }}</span>
+          </div>
+          <h5 style="font-size:15px; font-weight:600; margin-bottom:4px;">{{ r.title }}</h5>
+          <p style="font-size:13px; color:var(--apple-text-secondary); line-height:1.5; margin-bottom:8px;">{{ r.content }}</p>
+          <div style="font-size:12px; color:#86868b;">
+            Người gửi: <strong>{{ r.author_name }}</strong> ({% if r.phone_model_bought %}{{ r.phone_model_bought }}{% else %}Khách hàng xác thực{% endif %})
+          </div>
+        </div>
+      {% empty %}
+        <p style="text-align:center; color:#86868b; padding:20px;">Chưa có đánh giá nào cho sản phẩm này. Hãy là người đầu tiên trải nghiệm!</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/store.js' %}"></script>
+<script>
+  const variantMatrix = {{ variant_matrix_json|safe }};
+  const viewer = new CaseProductViewer(variantMatrix, '{{ selected_model.slug }}', '{{ selected_color.slug }}');
+
+  function switchCaseView(mode) {
+    document.getElementById('viewBackBtn').classList.toggle('active', mode === 'back');
+    document.getElementById('viewInsideBtn').classList.toggle('active', mode === 'inside');
+    viewer.setViewMode(mode);
+  }
+
+  function toggleReviewForm() {
+    const form = document.getElementById('reviewFormContainer');
+    if (form) {
+      form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+  }
+</script>
+{% endblock %}

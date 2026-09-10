@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tất Cả Ốp Lưng Silicon iPhone - Apple (VN){% endblock %}
+
+{% block content %}
+<div style="max-width: 1120px; margin: 0 auto; padding: 40px 20px 80px;">
+
+  <!-- Breadcrumb -->
+  <div style="font-size: 12px; color: var(--apple-text-secondary); margin-bottom: 24px;">
+    <a href="{% url 'shop:index' %}">Trang Chủ</a> &nbsp;›&nbsp;
+    <span>Phụ Kiện iPhone</span> &nbsp;›&nbsp;
+    <span style="color: var(--apple-text);">Ốp Lưng & Bảo Vệ Silicon</span>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; margin-bottom: 32px;">
+    <div>
+      <h1 style="font-size: 36px; font-weight: 700; color: var(--apple-dark-gray); letter-spacing: -0.01em;">
+        Ốp Lưng Silicon & Bảo Vệ
+      </h1>
+      <p style="color: var(--apple-text-secondary); font-size: 16px; margin-top: 6px;">
+        Đa dạng màu sắc sống động và vừa vặn chuẩn xác cho từng thế hệ iPhone.
+      </p>
+    </div>
+
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'shop:product_list' %}" style="display:flex; gap:8px;">
+      {% if selected_model_slug %}
+        <input type="hidden" name="model" value="{{ selected_model_slug }}">
+      {% endif %}
+      <div style="position:relative;">
+        <input 
+          type="text" 
+          name="q" 
+          value="{{ search_query }}" 
+          placeholder="Tìm ốp theo màu, dòng máy..." 
+          style="padding: 10px 16px 10px 36px; border-radius: var(--radius-pill); border: 1px solid var(--apple-border); font-size: 13px; outline: none; width: 240px; background:#fafafc;"
+        >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="2" style="position:absolute; left:12px; top:12px;">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+      <button type="submit" class="btn-apple-primary" style="padding: 8px 16px; font-size: 13px;">Tìm</button>
+      {% if search_query or selected_model_slug or selected_color_slug %}
+        <a href="{% url 'shop:product_list' %}" class="btn-apple-secondary" style="padding: 8px 14px; font-size: 13px;">Đặt lại</a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- Filter Bar: Dòng máy iPhone -->
+  <div style="margin-bottom: 24px;">
+    <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--apple-text-secondary); margin-bottom: 10px; letter-spacing: 0.05em;">
+      Lọc Theo Thiết Bị
+    </div>
+    <div class="model-pills-bar" style="margin-left: 0; padding-left: 0;">
+      <a href="{% url 'shop:product_list' %}{% if search_query %}?q={{ search_query }}{% endif %}" class="model-pill {% if not selected_model_slug %}active{% endif %}">
+        Tất Cả Mẫu Máy
+      </a>
+      {% for m in phone_models %}
+        <a href="{% url 'shop:product_list' %}?model={{ m.slug }}{% if search_query %}&q={{ search_query }}{% endif %}" class="model-pill {% if selected_model_slug == m.slug %}active{% endif %}">
+          {{ m.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Filter Bar: Màu sắc -->
+  <div style="margin-bottom: 40px; padding: 16px 20px; background: var(--apple-light-gray); border-radius: var(--radius-md); display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <span style="font-size: 13px; font-weight: 600; color: var(--apple-text);">Lọc theo màu:</span>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <a href="{% url 'shop:product_list' %}{% if selected_model_slug %}?model={{ selected_model_slug }}{% endif %}" style="font-size:12px; color:{% if not selected_color_slug %}var(--apple-blue); font-weight:bold;{% else %}var(--apple-text-secondary);{% endif %}">
+        Tất cả màu
+      </a>
+      {% for c in colors %}
+        <a 
+          href="{% url 'shop:product_list' %}?color={{ c.slug }}{% if selected_model_slug %}&model={{ selected_model_slug }}{% endif %}" 
+          class="color-swatch-btn {% if selected_color_slug == c.slug %}active{% endif %}" 
+          title="{{ c.name }}"
+          style="width:24px; height:24px;"
+        >
+          <span style="background-color: {{ c.hex_code }};"></span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="products-grid" style="padding: 0; margin-bottom: 40px;">
+    {% for product in products %}
+      <div class="product-card" id="card-{{ product.id }}">
+        {% if product.badge %}
+          <div class="product-badge">{{ product.badge }}</div>
+        {% endif %}
+
+        <!-- Real Image Preview -->
+        <div style="height: 230px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+          <img 
+            id="cardImg-{{ product.id }}" 
+            src="{% if product.image_url %}{{ product.image_url }}{% elif product.variants.first %}{{ product.variants.first.normalized_image_url }}{% else %}/static/images/cases/case-{% if selected_color_slug %}{{ selected_color_slug }}{% else %}lake-green{% endif %}-back.png{% endif %}"
+            alt="{{ product.title }}"
+            style="height: 210px; width: auto; object-fit: contain; filter: drop-shadow(0 14px 20px rgb(255, 255, 255)); transition: transform 0.3s;"
+          >
+        </div>
+
+        <!-- Color dots on card for instant color inspection -->
+        <div style="display:flex; gap:6px; justify-content:center; margin-bottom:14px;">
+          {% for variant in product.variants.all|dictsort:"color.order" %}
+            {% if variant.is_active %}
+              {% ifchanged variant.color.slug %}
+                <span
+                  data-image-url="{{ variant.normalized_image_url }}"
+                  onclick="changeCardImage({{ product.id }}, '{{ variant.color.slug }}', '{{ variant.normalized_image_url|escapejs }}')"
+                  style="cursor:pointer; display:inline-block; width:14px; height:14px; border-radius:50%; background:{{ variant.color.hex_code }};"
+                  title="{{ variant.color.name }}"
+                ></span>
+              {% endifchanged %}
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <h3 class="product-card-title">{{ product.title }}</h3>
+        <p class="product-card-desc">{{ product.short_description }}</p>
+        <div class="product-card-price">{{ product.formatted_price }}</div>
+
+        <div class="product-card-actions">
+          <a href="{% url 'shop:product_detail' slug=product.slug %}{% if selected_model_slug %}?model={{ selected_model_slug }}{% endif %}" class="btn-apple-primary">
+            Chọn Dòng Máy & Mua
+          </a>
+        </div>
+      </div>
+    {% empty %}
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+        <h3 style="font-size: 20px; font-weight:600; color: var(--apple-dark-gray); margin-bottom: 8px;">Không tìm thấy sản phẩm phù hợp</h3>
+        <p style="color: var(--apple-text-secondary); margin-bottom: 20px;">Hãy thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc dòng máy.</p>
+        <a href="{% url 'shop:product_list' %}" class="btn-apple-secondary">Xem tất cả ốp lưng</a>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function changeCardImage(productId, colorSlug, imageUrl) {
+    const img = document.getElementById('cardImg-' + productId);
+    if (img) {
+      const nextImage = imageUrl || `/static/images/cases/case-${colorSlug}-back.png`;
+      img.style.opacity = '0.4';
+      setTimeout(() => {
+        img.src = nextImage;
+        img.style.opacity = '1';
+      }, 100);
+    }
+  }
+</script>
+{% endblock %}

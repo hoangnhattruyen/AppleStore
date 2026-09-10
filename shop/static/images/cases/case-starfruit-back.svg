@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 620" width="100%" height="100%">
+  <defs>
+    <radialGradient id="siliconeMatte" cx="40%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#f3f0a4" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#e7e279" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#adab3c" stop-opacity="1"/>
+    </radialGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity="0.28"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+    <linearGradient id="bevelLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#e7e279" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="cameraGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Case Outer Body with Bevel and Shadow -->
+  <rect x="40" y="20" width="300" height="580" rx="56" fill="url(#siliconeMatte)" filter="url(#softShadow)"/>
+  <rect x="40" y="20" width="300" height="580" rx="56" fill="none" stroke="url(#bevelLight)" stroke-width="3"/>
+
+  <!-- Camera Plateau (Squircle) -->
+  <g filter="drop-shadow(0 4px 8px rgba(0,0,0,0.25))">
+    <rect x="62" y="42" width="128" height="136" rx="34" fill="#cac458"/>
+    <rect x="62" y="42" width="128" height="136" rx="34" fill="none" stroke="#ffffff" stroke-opacity="0.2" stroke-width="1.5"/>
+  </g>
+
+  <!-- Triple Camera Lenses -->
+  <!-- Top Left Lens -->
+  <circle cx="98" cy="78" r="23" fill="url(#cameraGlass)" stroke="#adab3c" stroke-width="3"/>
+  <circle cx="98" cy="78" r="16" fill="#0d0d10" stroke="#3f3f46" stroke-width="1"/>
+  <circle cx="93" cy="73" r="4.5" fill="#ffffff" fill-opacity="0.45"/>
+
+  <!-- Bottom Left Lens -->
+  <circle cx="98" cy="142" r="23" fill="url(#cameraGlass)" stroke="#adab3c" stroke-width="3"/>
+  <circle cx="98" cy="142" r="16" fill="#0d0d10" stroke="#3f3f46" stroke-width="1"/>
+  <circle cx="93" cy="137" r="4.5" fill="#ffffff" fill-opacity="0.45"/>
+
+  <!-- Right Middle Lens -->
+  <circle cx="154" cy="110" r="23" fill="url(#cameraGlass)" stroke="#adab3c" stroke-width="3"/>
+  <circle cx="154" cy="110" r="16" fill="#0d0d10" stroke="#3f3f46" stroke-width="1"/>
+  <circle cx="149" cy="105" r="4.5" fill="#ffffff" fill-opacity="0.45"/>
+
+  <!-- Flash & LiDAR -->
+  <circle cx="154" cy="66" r="9" fill="#fdfae8" stroke="#d4d4d8" stroke-width="1.5"/>
+  <circle cx="154" cy="148" r="7" fill="#1c1917" stroke="#44403c" stroke-width="1"/>
+
+  <!-- Camera Control Notch (Right side sapphire touch button) -->
+  <rect x="337" y="210" width="6" height="42" rx="3" fill="#ffffff" fill-opacity="0.75" filter="drop-shadow(0 0 4px rgba(255,255,255,0.5))"/>
+
+  <!-- Apple Logo in center -->
+  <g transform="translate(162, 290) scale(3.2)" fill="#adab3c" fill-opacity="0.55" filter="drop-shadow(0 1px 1px rgba(255,255,255,0.15))">
+    
+<path d="m15.2249 14.9078c-.413.988-1.0217 2.078-1.8176 3.244-.99 1.45-2.015 2.185-3.076 2.206-.63.012-1.399-.364-2.308-.737-.908-.372-1.748-.567-2.52-.584-.792.017-1.637.218-2.535.602-.898.384-1.649.756-2.253.719-1.061-.021-2.106-.777-3.134-2.268-1.428-2.074-2.388-4.475-2.88-7.202-.492-2.727-.272-5.068.66-7.022.932-1.954 2.305-3.085 4.12-3.393 1.042-.178 2.062.068 3.06.737.998.67 1.637 1.01 1.916 1.02.279-.01 1.014-.384 2.206-1.122 1.192-.738 2.308-.98 3.348-.727 1.678.397 2.985 1.47 3.921 3.22-1.503.922-2.247 2.247-2.232 3.975.015 1.728.804 3.125 2.366 4.19-.345 1.042-.816 2.078-1.413 3.109m-3.414-14.9078c.03.35.015.719-.044 1.107-.059.388-.191.756-.396 1.103-.314.53-.746.974-1.296 1.332-.55.358-1.144.577-1.782.657-.044-.33-.03-.68.044-1.05.074-.37.213-.734.418-1.093.308-.544.743-.997 1.304-1.359.561-.362 1.144-.576 1.752-.647z"/>
+
+  </g>
+</svg>

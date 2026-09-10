@@ -1,0 +1,1111 @@
+/* Apple Store Design System CSS */
+:root {
+  --apple-black: #161617;
+  --apple-dark-gray: #1d1d1f;
+  --apple-gray: #ffffff;
+  --apple-light-gray: #f5f5f7;
+  --apple-border: #d2d2d7;
+  --apple-blue: #0071e3;
+  --apple-blue-hover: #0077ed;
+  --apple-link: #06c;
+  --apple-card-bg: #ffffff;
+  --apple-text: #1d1d1f;
+  --apple-text-secondary: #6e6e73;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.12);
+  --case-color: #ffffff;
+  --case-accent: #f5f5f7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--apple-text);
+  background-color: #ffffff;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  color: var(--apple-link);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.apple-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 48px;
+  background: #161617;
+  color: #f5f5f7;
+}
+
+.nav-container {
+  max-width: 1024px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  color: #f5f5f7;
+  font-size: 18px;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.nav-logo:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #d6d6d6;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+  opacity: 0.8;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+  opacity: 1;
+  text-decoration: none;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-btn {
+  color: #f5f5f7;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: opacity 0.2s;
+}
+
+.nav-btn:hover {
+  opacity: 1;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--apple-blue);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 50%;
+  padding: 0 3px;
+}
+
+/* 2. Apple Ribbon Notification */
+.apple-ribbon {
+  background: var(--apple-light-gray);
+  border-bottom: 1px solid var(--apple-border);
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--apple-text-secondary);
+}
+
+.apple-ribbon strong {
+  color: var(--apple-text);
+  font-weight: 600;
+}
+
+/* 3. Hero Section */
+.hero-section {
+  background: white;
+  padding: 60px 20px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #bf4800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--apple-dark-gray);
+  max-width: 800px;
+  margin: 0 auto 12px;
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  font-size: 21px;
+  color: var(--apple-text-secondary);
+  max-width: 650px;
+  margin: 0 auto 28px;
+  font-weight: 400;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.btn-apple-primary {
+  background-color: var(--apple-blue);
+  color: #ffffff !important;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+.btn-apple-primary:hover {
+  background-color: var(--apple-blue-hover);
+  text-decoration: none;
+  transform: scale(1.02);
+}
+
+.btn-apple-secondary {
+  background-color: transparent;
+  color: var(--apple-blue);
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--apple-blue);
+  transition: var(--transition-smooth);
+}
+
+.btn-apple-secondary:hover {
+  background-color: rgba(0, 113, 227, 0.08);
+  text-decoration: none;
+}
+
+/* 4. Interactive Case Showcase Container */
+.case-interactive-stage {
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.case-visual-wrapper {
+  position: relative;
+  width: 280px;
+  height: 480px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.silicone-case-render {
+  width: 100%;
+  height: 100%;
+  border-radius: 46px;
+  background-color: var(--case-color);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25), inset 0 2px 4px rgb(255, 255, 255), inset 0 -4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: background-color 0.4s ease, transform 0.4s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 20px;
+}
+
+.silicone-case-render::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Camera Plateau */
+.case-camera-bump {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 105px;
+  height: 112px;
+  border-radius: 28px;
+  background-color: var(--case-accent);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 10px;
+  transition: background-color 0.4s ease;
+}
+
+.camera-lens {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #111;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 10px #000, 0 2px 4px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.camera-lens::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.lens-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 6px;
+}
+
+.camera-flash {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fdfaf0;
+  border: 1px solid #c8c0a0;
+  align-self: center;
+}
+
+/* Camera Control Sapphire Button Indicator */
+.camera-control-notch {
+  position: absolute;
+  right: -2px;
+  top: 170px;
+  width: 5px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: 3px 0 0 3px;
+  box-shadow: 0 0 8px rgb(255, 255, 255);
+  transition: opacity 0.3s;
+}
+
+/* Apple Logo on Case */
+.case-apple-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  opacity: 0.35;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+  transition: opacity 0.3s;
+}
+
+/* MagSafe Magnetic Ring Overlay */
+.magsafe-ring {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130px;
+  height: 130px;
+  border: 2.5px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.magsafe-ring::after {
+  content: '';
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+}
+
+.case-interactive-stage:hover .magsafe-ring,
+.case-interactive-stage.show-magsafe .magsafe-ring {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.02);
+}
+
+/* 5. Color Swatches Bar */
+.swatch-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.color-swatch-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 2px;
+  transition: var(--transition-smooth);
+  position: relative;
+  background: transparent;
+}
+
+.color-swatch-btn span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.color-swatch-btn:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch-btn.active {
+  border-color: var(--apple-blue);
+  transform: scale(1.15);
+}
+
+.selected-color-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--apple-text-secondary);
+  text-align: center;
+  margin-top: 8px;
+}
+
+.selected-color-label strong {
+  color: var(--apple-text);
+}
+
+/* 6. Section Titles */
+.section-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 60px auto 36px;
+  padding: 0 20px;
+}
+
+.section-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--apple-dark-gray);
+  line-height: 1.2;
+}
+
+/* 7. Model Filter Pills (Apple Style) */
+.model-pills-bar {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 20px;
+  max-width: 1024px;
+  margin: 0 auto 32px;
+  justify-content: flex-start;
+  scrollbar-width: none;
+}
+
+.model-pills-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.model-pill {
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--apple-light-gray);
+  color: var(--apple-text);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+  border: 1px solid transparent;
+}
+
+.model-pill:hover {
+  background: #e8e8ed;
+  text-decoration: none;
+}
+
+.model-pill.active {
+  background: var(--apple-dark-gray);
+  color: #ffffff;
+}
+
+/* 8. Product Grid & Cards */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  max-width: 1120px;
+  margin: 0 auto 80px;
+  padding: 0 24px;
+}
+
+.product-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 32px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.product-badge {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #bf4800;
+}
+
+.product-card-preview {
+  width: 160px;
+  height: 250px;
+  margin: 16px auto 24px;
+  position: relative;
+}
+
+.card-case-mini {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background-color: var(--case-color);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.card-case-mini .case-camera-bump {
+  top: 10px;
+  left: 10px;
+  width: 58px;
+  height: 62px;
+  border-radius: 16px;
+  padding: 6px;
+}
+
+.card-case-mini .camera-lens {
+  width: 20px;
+  height: 20px;
+}
+
+.card-case-mini .case-apple-logo {
+  width: 24px;
+  height: 24px;
+}
+
+.product-card-title {
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--apple-dark-gray);
+  margin-bottom: 8px;
+  line-height: 1.35;
+  width: 100%;
+  display: block;
+}
+
+.product-card-desc {
+  font-size: 13px;
+  color: var(--apple-text-secondary);
+  margin-bottom: 16px;
+  min-height: 38px;
+  line-height: 1.5;
+  width: 100%;
+  display: block;
+}
+
+.product-card-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--apple-dark-gray);
+  margin-bottom: 18px;
+  width: 100%;
+  display: block;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.product-card-actions .btn-apple-primary {
+  flex: 1;
+  justify-content: center;
+  padding: 10px 14px;
+}
+
+.product-card-actions .btn-apple-secondary {
+  padding: 10px 14px;
+}
+
+/* 9. Feature Highlight Banner */
+.features-container {
+  background: var(--apple-light-gray);
+  padding: 80px 24px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.feature-box {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: var(--transition-smooth);
+}
+
+.feature-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(0, 113, 227, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-blue);
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--apple-dark-gray);
+}
+
+.feature-text {
+  font-size: 14px;
+  color: var(--apple-text-secondary);
+  line-height: 1.6;
+}
+
+/* 10. Apple Shopping Bag Slide-Over Drawer */
+.cart-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.cart-drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 400px;
+  max-width: 100vw;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: var(--shadow-lg);
+  z-index: 2001;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cart-drawer-overlay.open .cart-drawer {
+  right: 0;
+}
+
+.drawer-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--apple-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--apple-dark-gray);
+}
+
+.drawer-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--apple-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text);
+  font-size: 18px;
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.cart-item-row {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #f0f0f2;
+}
+
+.cart-item-color-pill {
+  width: 40px;
+  height: 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-dark-gray);
+  margin-bottom: 4px;
+}
+
+.cart-item-meta {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  margin-bottom: 8px;
+}
+
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--apple-light-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.cart-item-price {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.cart-remove-btn {
+  font-size: 11px;
+  color: #ff3b30;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.drawer-footer {
+  padding: 24px;
+  border-top: 1px solid var(--apple-border);
+  background: #fafafc;
+}
+
+.drawer-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.drawer-free-ship {
+  font-size: 12px;
+  color: #34c759;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 11. Toast Notifications */
+.apple-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(29, 29, 31, 0.92);
+  color: #ffffff;
+  backdrop-filter: blur(16px);
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  z-index: 3000;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.apple-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* 12. Apple Footer */
+.apple-footer {
+  background: var(--apple-light-gray);
+  border-top: 1px solid var(--apple-border);
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  padding: 34px 20px 48px;
+}
+
+.footer-container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.footer-disclaimer {
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--apple-border);
+  line-height: 1.6;
+}
+
+.footer-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.footer-col-title {
+  font-weight: 600;
+  color: var(--apple-text);
+  margin-bottom: 10px;
+}
+
+.footer-col-links {
+  list-style: none;
+}
+
+.footer-col-links li {
+  margin-bottom: 8px;
+}
+
+.footer-col-links a {
+  color: var(--apple-text-secondary);
+}
+
+.footer-col-links a:hover {
+  color: var(--apple-text);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--apple-border);
+}
+
+/* 13. Responsive */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 32px;
+  }
+  .hero-subtitle {
+    font-size: 17px;
+  }
+  .case-visual-wrapper {
+    width: 220px;
+    height: 380px;
+  }
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-links {
+    display: none;
+  }
+}
+
+/* 14. Navigation Dropdown Menu */
+.nav-item-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -20px;
+  background: rgba(22, 22, 23, 0.96);
+  backdrop-filter: blur(24px);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 20px 24px;
+  display: none;
+  gap: 32px;
+  z-index: 1000;
+  min-width: 520px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-item-dropdown:hover .nav-dropdown-menu {
+  display: flex;
+}
+
+.dropdown-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.dropdown-heading {
+  font-size: 11px;
+  font-weight: 600;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.dropdown-column a {
+  font-size: 13px !important;
+  color: #e1e1e6 !important;
+  padding: 4px 0;
+  white-space: nowrap;
+}
+
+.dropdown-column a:hover {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+/* 15. Apple Device Sub-Navigation Bar */
+.device-subnav-bar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--apple-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.device-subnav-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.device-subnav-container {
+  max-width: 1024px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  gap: 20px;
+  min-width: 720px;
+}
+
+.device-subnav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--apple-text);
+  text-decoration: none !important;
+  transition: transform 0.2s, opacity 0.2s;
+  position: relative;
+}
+
+.device-subnav-item:hover {
+  transform: translateY(-2px);
+}
+
+.device-icon {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-dark-gray);
+  opacity: 0.85;
+}
+
+.device-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--apple-dark-gray);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.device-badge {
+  font-size: 9px;
+  font-weight: 700;
+  color: #bf4800;
+  margin-top: -3px;
+}
+
+/* 16. Case Real Image Showcase */
+.case-photo-container {
+  position: relative;
+  width: 380px;
+  height: 480px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+}
+
+.case-photo-img:hover {
+  transform: scale(1.03);
+}
+
+.case-gallery-thumbs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.thumb-btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--apple-border);
+  background: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--apple-dark-gray);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.thumb-btn:hover {
+  border-color: #999;
+}
+
+.thumb-btn.active {
+  background: var(--apple-dark-gray);
+  color: #ffffff;
+  border-color: var(--apple-dark-gray);
+}
+

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Xác Nhận Đơn Hàng #{{ order.order_code }} - Apple (VN){% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 50px auto 100px; padding: 0 20px;">
+
+  <!-- Success Header -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <div style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:50%; background:#34c759; color:#fff; font-size:32px; margin-bottom:16px;">
+      ✓
+    </div>
+    <h1 style="font-size: 32px; font-weight: 700; color: var(--apple-dark-gray); margin-bottom: 8px;">
+      Cảm ơn bạn đã đặt hàng!
+    </h1>
+    <p style="font-size: 16px; color: var(--apple-text-secondary);">
+      Mã số đơn hàng của bạn là <strong style="color:var(--apple-blue); font-size:18px;">#{{ order.order_code }}</strong>
+    </p>
+    <p style="font-size: 13px; color: #86868b; margin-top: 4px;">
+      Hóa đơn điện tử và thông báo xác nhận đã được gửi đến: <strong>{{ order.customer_email }}</strong>
+    </p>
+  </div>
+
+  <!-- If Payment Method is VietQR -->
+  {% if order.payment_method == 'vietqr' %}
+    <div style="background: #fbfbfd; border: 2px solid var(--apple-blue); border-radius: 18px; padding: 32px; margin-bottom: 36px; text-align: center;">
+      <h2 style="font-size: 20px; font-weight: 700; color: var(--apple-dark-gray); margin-bottom: 8px;">
+        Thanh Toán Qua Chuyển Khoản VietQR Tức Thì
+      </h2>
+      <p style="font-size: 14px; color: var(--apple-text-secondary); margin-bottom: 24px;">
+        Vui lòng mở ứng dụng ngân hàng bất kỳ (Vietcombank, MB, Techcombank, VPBank...) và quét mã QR bên dưới để hoàn tất:
+      </p>
+
+      <div style="background:#ffffff; display:inline-block; padding:16px; border-radius:14px; box-shadow:var(--shadow-md); margin-bottom:20px;">
+        <img src="{{ vietqr_url }}" alt="Mã VietQR Thanh Toán" style="width: 260px; height: 260px; display:block; border-radius:8px;">
+      </div>
+
+      <div style="background:#ffffff; border-radius:12px; padding:20px; max-width:480px; margin:0 auto; text-align:left; font-size:14px; border:1px solid var(--apple-border);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--apple-text-secondary);">Ngân hàng:</span>
+          <strong>{{ bank_name }}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--apple-text-secondary);">Số tài khoản:</span>
+          <strong>{{ account_no }}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--apple-text-secondary);">Chủ tài khoản:</span>
+          <strong>{{ account_name }}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--apple-text-secondary);">Số tiền cần chuyển:</span>
+          <strong style="color:#d70000; font-size:16px;">{{ order.formatted_total }}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--apple-text-secondary);">Nội dung chuyển khoản:</span>
+          <strong style="color:var(--apple-blue);">THANH TOAN DON {{ order.order_code }}</strong>
+        </div>
+      </div>
+    </div>
+  {% elif order.payment_method == 'cod' %}
+    <div style="background: #eef7ff; border-radius: 16px; padding: 24px; margin-bottom: 36px; text-align: center;">
+      <h3 style="font-size: 18px; font-weight: 700; color: #0051a8; margin-bottom: 6px;">
+        Phương thức: Thanh toán khi nhận hàng (COD)
+      </h3>
+      <p style="font-size: 14px; color: #004085;">
+        Bạn sẽ thanh toán số tiền <strong>{{ order.formatted_total }}</strong> trực tiếp cho nhân viên giao hàng khi nhận và kiểm tra gói hàng.
+      </p>
+    </div>
+  {% endif %}
+
+  <!-- Order Timeline Tracker -->
+  <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px; margin-bottom: 36px;">
+    <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-dark-gray); margin-bottom: 24px;">
+      Tiến Độ Đơn Hàng
+    </h3>
+    <div style="display: flex; justify-content: space-between; position: relative;">
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: #34c759; color: #fff; line-height: 32px; margin: 0 auto 8px; font-weight: bold;">✓</div>
+        <div style="font-size: 13px; font-weight: 600;">Đã Đặt Hàng</div>
+        <div style="font-size: 11px; color: #86868b;">{{ order.created_at|date:"H:i, d/m/Y" }}</div>
+      </div>
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--apple-blue); color: #fff; line-height: 32px; margin: 0 auto 8px; font-weight: bold;">2</div>
+        <div style="font-size: 13px; font-weight: 600;">Đang Xử Lý & Đóng Gói</div>
+        <div style="font-size: 11px; color: #86868b;">Chuẩn Apple Care</div>
+      </div>
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: #e5e5ea; color: #86868b; line-height: 32px; margin: 0 auto 8px; font-weight: bold;">3</div>
+        <div style="font-size: 13px; font-weight: 600; color:#86868b;">Đang Vận Chuyển</div>
+        <div style="font-size: 11px; color: #86868b;">Dự kiến 1-2 ngày</div>
+      </div>
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: #e5e5ea; color: #86868b; line-height: 32px; margin: 0 auto 8px; font-weight: bold;">4</div>
+        <div style="font-size: 13px; font-weight: 600; color:#86868b;">Giao Hàng Thành Công</div>
+        <div style="font-size: 11px; color: #86868b;">Tận tay khách hàng</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Items & Shipping Address Details -->
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 36px;">
+    <!-- Items -->
+    <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 24px;">
+      <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">Sản Phẩm Trong Đơn</h4>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        {% for item in order.items.all %}
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="width: 28px; height: 42px; border-radius: 6px; background: {{ item.color_hex }}; flex-shrink:0;"></div>
+            <div style="flex:1;">
+              <div style="font-size: 13px; font-weight: 600;">{{ item.product_name }}</div>
+              <div style="font-size: 11px; color: var(--apple-text-secondary);">{{ item.phone_model_name }} • {{ item.color_name }} × {{ item.quantity }}</div>
+            </div>
+            <div style="font-size: 13px; font-weight: 600;">{{ item.formatted_subtotal }}</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div style="border-top:1px solid #ebebee; margin-top:16px; padding-top:12px; display:flex; justify-content:space-between; font-weight:700;">
+        <span>Tổng thanh toán:</span>
+        <span style="color:var(--apple-blue);">{{ order.formatted_total }}</span>
+      </div>
+    </div>
+
+    <!-- Shipping Info -->
+    <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 24px;">
+      <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">Địa Chỉ Nhận Hàng</h4>
+      <p style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">{{ order.customer_name }}</p>
+      <p style="font-size: 13px; color: var(--apple-text-secondary); margin-bottom: 4px;">SĐT: {{ order.customer_phone }}</p>
+      <p style="font-size: 13px; color: var(--apple-text-secondary); margin-bottom: 4px;">Địa chỉ: {{ order.shipping_address }}, {{ order.province_city }}</p>
+      {% if order.note %}
+        <p style="font-size: 12px; color: #86868b; margin-top: 8px;">Ghi chú: "{{ order.note }}"</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <a href="{% url 'shop:index' %}" class="btn-apple-primary" style="padding: 12px 28px;">
+      Tiếp Tục Mua Sắm
+    </a>
+  </div>
+
+</div>
+{% endblock %}

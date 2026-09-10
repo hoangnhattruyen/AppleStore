@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Thanh Toán - Apple Store Trực Tuyến Việt Nam{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 40px auto 80px; padding: 0 20px;">
+
+  <div style="text-align:center; margin-bottom: 36px;">
+    <h1 style="font-size: 32px; font-weight: 700; color: var(--apple-dark-gray);">Thanh Toán Túi Hàng Của Bạn</h1>
+    <p style="color: var(--apple-text-secondary); font-size: 15px; margin-top: 6px;">
+      Giao hàng miễn phí toàn quốc. Mua sắm bảo mật cùng Apple.
+    </p>
+  </div>
+
+  {% if messages %}
+    <div style="margin-bottom: 24px;">
+      {% for message in messages %}
+        <div style="padding: 12px 18px; border-radius: 8px; font-size: 14px; background: #fff2f2; color: #d70000; border: 1px solid #ffd6d6; margin-bottom: 8px;">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'shop:checkout' %}">
+    {% csrf_token %}
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px;">
+
+      <!-- Left Column: Shipping & Payment Details -->
+      <div>
+        <!-- 1. Contact Info -->
+        <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px; margin-bottom: 24px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 18px; color: var(--apple-dark-gray);">
+            1. Thông Tin Người Nhận
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Họ và tên *</label>
+              <input type="text" name="name" required value="{% if request.user.is_authenticated %}{{ request.user.first_name }} {{ request.user.last_name }}{% endif %}" placeholder="Ví dụ: Nguyễn Văn An" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div>
+                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Số điện thoại *</label>
+                <input type="tel" name="phone" required placeholder="0901 234 567" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+              </div>
+              <div>
+                <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Email nhận hóa đơn *</label>
+                <input type="email" name="email" required value="{% if request.user.is_authenticated %}{{ request.user.email }}{% endif %}" placeholder="name@icloud.com" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Delivery Address -->
+        <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px; margin-bottom: 24px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 18px; color: var(--apple-dark-gray);">
+            2. Địa Chỉ Giao Hàng
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Tỉnh / Thành phố *</label>
+              <select name="city" required style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px; background:#fff;">
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="TP. Hồ Chí Minh" selected>TP. Hồ Chí Minh</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+                <option value="Hải Phòng">Hải Phòng</option>
+                <option value="Cần Thơ">Cần Thơ</option>
+                <option value="Bình Dương">Bình Dương</option>
+                <option value="Đồng Nai">Đồng Nai</option>
+                <option value="Quảng Ninh">Quảng Ninh</option>
+                <option value="Khánh Hòa">Khánh Hòa</option>
+                <option value="Khác">Tỉnh thành khác</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Địa chỉ chi tiết (Số nhà, đường, phường/xã) *</label>
+              <input type="text" name="address" required placeholder="Ví dụ: 123 Đường Lê Lợi, Phường Bến Thành, Quận 1" style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Ghi chú giao hàng (Không bắt buộc)</label>
+              <textarea name="note" rows="2" placeholder="Giao trong giờ hành chính, gọi trước khi đến..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:13px;"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Payment Method Selection -->
+        <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px;">
+          <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 18px; color: var(--apple-dark-gray);">
+            3. Phương Thức Thanh Toán
+          </h2>
+          
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <label style="display:flex; align-items:center; gap:14px; padding:16px; border:1px solid #0071e3; background:rgba(0,113,227,0.04); border-radius:12px; cursor:pointer;">
+              <input type="radio" name="payment_method" value="vietqr" checked style="accent-color: #0071e3;">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--apple-dark-gray);">Chuyển khoản nhanh VietQR (Khuyên dùng)</div>
+                <div style="font-size:12px; color:var(--apple-text-secondary);">Quét mã QR tự động điền số tiền và nội dung qua ứng dụng ngân hàng</div>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:14px; padding:16px; border:1px solid var(--apple-border); border-radius:12px; cursor:pointer;">
+              <input type="radio" name="payment_method" value="cod" style="accent-color: #0071e3;">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--apple-dark-gray);">Thanh toán khi nhận hàng (COD)</div>
+                <div style="font-size:12px; color:var(--apple-text-secondary);">Kiểm tra hàng chính hãng Apple trước khi thanh toán tiền mặt</div>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:14px; padding:16px; border:1px solid var(--apple-border); border-radius:12px; cursor:pointer;">
+              <input type="radio" name="payment_method" value="apple_pay" style="accent-color: #0071e3;">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--apple-dark-gray);">Apple Pay / Thẻ Quốc Tế (Visa, Mastercard)</div>
+                <div style="font-size:12px; color:var(--apple-text-secondary);">Thanh toán an toàn bảo mật chuẩn quốc tế</div>
+              </div>
+            </label>
+
+            <label style="display:flex; align-items:center; gap:14px; padding:16px; border:1px solid var(--apple-border); border-radius:12px; cursor:pointer;">
+              <input type="radio" name="payment_method" value="momo" style="accent-color: #0071e3;">
+              <div>
+                <div style="font-weight:600; font-size:14px; color:var(--apple-dark-gray);">Ví MoMo</div>
+                <div style="font-size:12px; color:var(--apple-text-secondary);">Thanh toán tiện lợi qua ví điện tử MoMo</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Summary -->
+      <div>
+        <div style="background: #fafafc; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px; position:sticky; top:80px;">
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--apple-dark-gray);">
+            Tóm Tắt Túi Hàng ({{ cart_count }})
+          </h3>
+
+          <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px;">
+            {% for item in cart %}
+              <div style="display: flex; gap: 12px; align-items: center;">
+                <img src="/static/images/cases/case-{{ item.color.slug }}-back.png" alt="{{ item.color.name }}" style="width: 32px; height: 50px; object-fit: contain; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15)); flex-shrink:0;">
+                <div style="flex:1;">
+                  <div style="font-size: 13px; font-weight: 600; color: var(--apple-dark-gray);">{{ item.product.title }}</div>
+                  <div style="font-size: 11px; color: var(--apple-text-secondary);">{{ item.phone_model.name }} • {{ item.color.name }} × {{ item.quantity }}</div>
+                </div>
+                <div style="font-size: 13px; font-weight: 600;">{{ item.formatted_total_price }}</div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div style="border-top: 1px solid var(--apple-border); padding-top: 16px; margin-bottom: 20px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; color:var(--apple-text-secondary);">
+              <span>Tạm tính:</span>
+              <span>{{ cart.formatted_total_price }}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px; color: #34c759; font-weight:600;">
+              <span>Giao hàng:</span>
+              <span>MIỄN PHÍ</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:700; color:var(--apple-dark-gray); padding-top:8px; border-top:1px solid #ebebee;">
+              <span>Tổng cộng:</span>
+              <span>{{ cart.formatted_total_price }}</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-apple-primary" style="width:100%; justify-content:center; padding:16px; font-size:16px;">
+            Xác Nhận & Đặt Hàng
+          </button>
+
+          <p style="font-size: 11px; color: #86868b; text-align: center; margin-top: 14px; line-height: 1.4;">
+            Bằng việc hoàn tất đơn đặt hàng, bạn đồng ý với Điều Khoản Mua Hàng và Chính Sách Quyền Riêng Tư của Apple.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+{% endblock %}

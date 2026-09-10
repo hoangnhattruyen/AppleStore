@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mua Ốp Lưng Silicon với MagSafe cho iPhone - Apple (VN){% endblock %}
+
+{% block content %}
+
+<!-- 1. Hero Spotlight Section -->
+<section class="hero-section">
+  <div class="hero-badge">Sản Phẩm Mới</div>
+  <h1 class="hero-title">Ốp Lưng Silicon với MagSafe</h1>
+  <p class="hero-subtitle">Màu sắc sống động. Chạm êm ái. Hoạt động liền mạch cùng Điều Khiển Camera.</p>
+
+  <div class="hero-buttons">
+    <a href="{% url 'shop:product_detail' slug=hero_product.slug %}" class="btn-apple-primary">
+      <span>Mua ngay</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </a>
+    <a href="#featured-section" class="btn-apple-secondary">Khám phá các màu</a>
+  </div>
+
+  <!-- Interactive Case Stage with Live Color Switcher -->
+  <!-- Interactive Case Stage with Real Case Images -->
+  <div class="case-interactive-stage">
+    <div class="case-photo-container">
+      <img id="heroCaseImage" class="case-photo-img" src="https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MT0N3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=ZUoyTWFicU1MN0Z6QlNDMk9LUlJNd2tuVHYzMERCZURia3c5SzJFOTlPaFdPNXNCZjFUY2U4dzhjY0xjYWZIRndUNHc3RFQ5WU9idDFINm9nOVdOQWc" alt="Ốp Lưng Silicon Apple với MagSafe">
+    </div>
+
+    <!-- Live Color Swatches under Hero Case -->
+    <div class="swatch-group">
+      {% for color in colors %}
+        <button 
+          class="color-swatch-btn {% if forloop.first %}active{% endif %}" 
+          data-hero-color="{{ color.hex_code }}"
+          data-hero-slug="{{ color.slug }}"
+          data-hero-name="{{ color.name }} ({{ color.english_name }})"
+          title="{{ color.name }}"
+        >
+          <span style="background-color: {{ color.hex_code }};"></span>
+        </button>
+      {% endfor %}
+    </div>
+    <div class="selected-color-label" id="heroColorLabel">
+      Màu đang chọn:
+      {% if colors %}
+        <strong>{{ colors.0.name }} ({{ colors.0.english_name }})</strong>
+      {% else %}
+        <strong>—</strong>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- 2. Device Selection Bar (iPhone Models) -->
+<section style="padding: 24px 0; background: #ffffff;">
+  <div class="section-header" style="margin: 20px auto 16px;">
+    <div class="section-eyebrow">Khám Phá Theo Dòng Máy</div>
+    <h2 class="section-title">Chọn iPhone của bạn</h2>
+  </div>
+
+  <div class="model-pills-bar">
+    <a href="{% url 'shop:product_list' %}" class="model-pill active">Tất Cả Mẫu Máy</a>
+    {% for model in phone_models %}
+      <a href="{% url 'shop:product_list' %}?model={{ model.slug }}" class="model-pill">
+        {{ model.name }}
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 3. Featured Cases Grid -->
+<section id="featured-section" style="padding-bottom: 60px;">
+  <div class="products-grid">
+    {% for product in featured_products %}
+      <div class="product-card">
+        {% if product.badge %}
+          <div class="product-badge">{{ product.badge }}</div>
+        {% endif %}
+
+        <!-- Real Image Card Preview -->
+        <div style="height: 230px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+          <img 
+            id="cardImg-{{ product.id }}" 
+            src="{{ product.display_image_url }}"
+            alt="{{ product.title }}"
+            style="height: 210px; width: auto; object-fit: contain; transition: transform 0.3s;"
+          >
+        </div>
+
+        <h3 class="product-card-title">{{ product.title }}</h3>
+        <p class="product-card-desc">{{ product.short_description }}</p>
+        <div class="product-card-price">{{ product.formatted_price }}</div>
+
+        <div class="product-card-actions">
+          <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn-apple-primary">
+            Xem & Đặt Mua
+          </a>
+          <a href="{% url 'shop:product_detail' slug=product.slug %}" class="btn-apple-secondary" title="Chọn màu sắc">
+            Tùy chọn
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- 4. MagSafe & Silicone Craftsmanship Section -->
+<section class="features-container">
+  <div class="section-header" style="margin-top: 0;">
+    <div class="section-eyebrow">Tay Nghề Chế Tác Apple</div>
+    <h2 class="section-title">Được thiết kế để bảo vệ & truyền cảm hứng</h2>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-box">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 8v8"></path>
+          <path d="M8 12h8"></path>
+        </svg>
+      </div>
+      <h3 class="feature-title">Silicon Êm Ái & Mịn Màng</h3>
+      <p class="feature-text">Mặt ngoài bằng silicon hoàn thiện mượt mà, chống bám dấu vân tay và bụi bẩn, cho cảm giác cầm nắm chắc chắn và thư thái trong lòng bàn tay.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <h3 class="feature-title">Kính Sapphire Camera Control</h3>
+      <p class="feature-text">Ốp lưng iPhone 16 trang bị một lớp kính sapphire phủ lớp dẫn điện truyền tải chính xác từng cử chỉ trượt và nhấn vào phím Camera Control.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="8"></circle>
+          <line x1="12" y1="2" x2="12" y2="6"></line>
+          <line x1="12" y1="18" x2="12" y2="22"></line>
+        </svg>
+      </div>
+      <h3 class="feature-title">Hệ Sinh Thái MagSafe</h3>
+      <p class="feature-text">Vòng nam châm tích hợp tự động căn chỉnh hoàn hảo cùng bộ sạc không dây, sạc dự phòng MagSafe và ví da Apple mà không cần tháo ốp.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Real Customer Reviews Section -->
+<section style="padding: 80px 20px; max-width: 1024px; margin: 0 auto;">
+  <div class="section-header" style="margin-top: 0;">
+    <div class="section-eyebrow">Trải Nghiệm Thực Tế</div>
+    <h2 class="section-title">Khách hàng nói gì về ốp lưng Apple?</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+    {% for review in reviews %}
+      <div style="background:#fafafc; border-radius:16px; padding:28px; border:1px solid #ebebee;">
+        <div style="color: #ff9500; font-size: 16px; margin-bottom: 8px;">
+          {% for i in "12345"|make_list %}
+            {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+          {% endfor %}
+        </div>
+        <h4 style="font-size: 16px; font-weight: 600; color: var(--apple-dark-gray); margin-bottom: 6px;">
+          {{ review.title }}
+        </h4>
+        <p style="font-size: 13px; color: var(--apple-text-secondary); line-height: 1.6; margin-bottom: 14px;">
+          "{{ review.content }}"
+        </p>
+        <div style="display:flex; justify-content:space-between; font-size:12px; color:#86868b;">
+          <span><strong>{{ review.author_name }}</strong> ({{ review.phone_model_bought }})</span>
+          <span style="color:#34c759;">✓ Đã xác thực mua hàng</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Hero Interactive Color Swatcher with Real Images
+  document.querySelectorAll('[data-hero-color]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-hero-color]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const slug = btn.getAttribute('data-hero-slug');
+      const name = btn.getAttribute('data-hero-name');
+
+      const heroImg = document.getElementById('heroCaseImage');
+      if (heroImg && slug) {
+        heroImg.style.opacity = '0.4';
+        setTimeout(() => {
+          heroImg.src = `/static/images/cases/case-${slug}-back.png`;
+          heroImg.style.opacity = '1';
+        }, 120);
+      }
+
+      const label = document.getElementById('heroColorLabel');
+      if (label) {
+        label.innerHTML = `Màu đang chọn: <strong>${name}</strong>`;
+      }
+    });
+  });
+</script>
+{% endblock %}

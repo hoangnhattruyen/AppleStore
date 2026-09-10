@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Tra Cứu Đơn Hàng - Apple Store (VN){% endblock %}
+
+{% block content %}
+<div style="max-width: 720px; margin: 50px auto 100px; padding: 0 20px;">
+
+  <div style="text-align: center; margin-bottom: 36px;">
+    <h1 style="font-size: 32px; font-weight: 700; color: var(--apple-dark-gray); margin-bottom: 8px;">
+      Tra Cứu Đơn Hàng Của Bạn
+    </h1>
+    <p style="font-size: 15px; color: var(--apple-text-secondary);">
+      Nhập mã đơn hàng (AP-VN-XXXXXX) và số điện thoại đặt hàng để kiểm tra trạng thái vận chuyển.
+    </p>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 32px; box-shadow: var(--shadow-sm); margin-bottom: 36px;">
+    <form method="POST" action="{% url 'shop:order_lookup' %}">
+      {% csrf_token %}
+      <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Mã đơn hàng *</label>
+          <input type="text" name="order_code" placeholder="Ví dụ: AP-VN-A1B2C3" required style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px; text-transform:uppercase;">
+        </div>
+        <div>
+          <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Số điện thoại người nhận *</label>
+          <input type="tel" name="phone" placeholder="Số điện thoại đã dùng để đặt hàng" required style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:14px;">
+        </div>
+      </div>
+      <button type="submit" class="btn-apple-primary" style="width:100%; justify-content:center; padding:14px; font-size:15px;">
+        Tra Cứu Đơn Hàng
+      </button>
+    </form>
+  </div>
+
+  {% if searched %}
+    {% if order %}
+      <div style="background: #ffffff; border: 1px solid var(--apple-border); border-radius: 16px; padding: 28px; box-shadow: var(--shadow-md);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #eee; padding-bottom:12px;">
+          <div>
+            <span style="font-size:12px; color:#86868b;">Mã đơn:</span>
+            <strong style="color:var(--apple-blue); font-size:16px;">#{{ order.order_code }}</strong>
+          </div>
+          <span style="background:#eef7ff; color:#0071e3; font-weight:600; padding:4px 12px; border-radius:999px; font-size:12px;">
+            {{ order.get_status_display }}
+          </span>
+        </div>
+
+        <p style="font-size:14px; margin-bottom:6px;">Người nhận: <strong>{{ order.customer_name }}</strong></p>
+        <p style="font-size:14px; margin-bottom:6px;">Địa chỉ: <strong>{{ order.shipping_address }}, {{ order.province_city }}</strong></p>
+        <p style="font-size:14px; margin-bottom:16px;">Tổng tiền: <strong style="color:#d70000;">{{ order.formatted_total }}</strong> ({{ order.get_payment_method_display }})</p>
+
+        <h4 style="font-size:14px; font-weight:700; margin-bottom:10px;">Sản phẩm:</h4>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          {% for item in order.items.all %}
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:8px 0; border-top:1px solid #fafafa;">
+              <span>{{ item.product_name }} ({{ item.phone_model_name }} - {{ item.color_name }}) × {{ item.quantity }}</span>
+              <strong>{{ item.formatted_subtotal }}</strong>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 32px; background: #fafafc; border-radius: 16px; border: 1px solid var(--apple-border);">
+        <p style="font-size:15px; font-weight:600; color:var(--apple-dark-gray); margin-bottom:6px;">Không tìm thấy thông tin đơn hàng</p>
+        <p style="font-size:13px; color:var(--apple-text-secondary);">Vui lòng kiểm tra lại mã đơn hoặc số điện thoại.</p>
+      </div>
+    {% endif %}
+  {% endif %}
+
+</div>
+{% endblock %}
