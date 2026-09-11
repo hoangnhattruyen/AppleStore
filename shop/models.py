@@ -28,6 +28,7 @@ class Color(models.Model):
     secondary_hex = models.CharField(max_length=20, verbose_name="Mã viền/bóng", blank=True)
     is_dark = models.BooleanField(default=False, verbose_name="Màu tối")
     is_hidden = models.BooleanField(default=False, verbose_name="Ẩn khỏi giao diện")
+    image_url = models.CharField(max_length=500, blank=True, verbose_name="Ảnh swatch/variant URL")
     order = models.IntegerField(default=0, verbose_name="Thứ tự")
 
     class Meta:

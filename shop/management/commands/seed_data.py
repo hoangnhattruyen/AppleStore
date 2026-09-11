@@ -56,13 +56,32 @@ class Command(BaseCommand):
             {"slug": "stone-gray", "name": "Đá Phiến", "en": "Stone Gray", "hex": "#76797d", "sec": "#8f9397", "dark": False, "order": 7},
             {"slug": "product-red", "name": "Siêu Phẩm Đỏ", "en": "PRODUCT(RED)", "hex": "#c81e26", "sec": "#e6353e", "dark": False, "order": 8},
             {"slug": "ultramarine", "name": "Xanh Siêu Âm", "en": "Ultramarine", "hex": "#264875", "sec": "#355e96", "dark": False, "order": 9},
-            {"slug": "hoa-djang", "name": "Hoa Đăng", "en": "Hoa Djang", "hex": "#982f80", "sec": "#f0b98b", "dark": False, "order": 10},
+            {"slug": "hoa-dang", "name": "Hoa Đăng", "en": "Hoa Dang", "hex": "#982f80", "sec": "#f0b98b", "dark": False, "order": 10},
             {"slug": "datset", "name": "Dat set", "en": "Light Pink", "hex": "#BDBAA2", "sec": "#dca2ac", "dark": False, "order": 4},
             {"slug": "XanhGiongTo", "name": "Blue", "en": "Light Pink", "hex": "#758DA3", "sec": "#dca2ac", "dark": False, "order": 4},
         ]
-        # Nếu muốn ẩn một số màu khỏi giao diện, bỏ qua khi tạo đối tượng Color.
-        # Hiện tại ẩn hai màu đầu tiên (black16, black16pr).
+        # Nếu muốn ẩn một số màu khỏi giao diện, đánh dấu is_hidden=True.
         hidden_slugs = {"black15","black15pr","black16", "black16pr","XanhGiongTo","datset","light-pink15pr","light-pink15"}
+
+        # Map màu -> image URL (dùng cho seed để gán image_url cho Color/Variant)
+        color_image_map = {
+            "black15pr":"https://down-vn.img.susercontent.com/file/sg-11134201-7rbk4-lmk3ih8qi82h52@resize_w900_nl.webp",
+            "black15":"https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MT0J3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=bm5sRU4yakhNdG1UUW40VWNNbTBWd2tuVHYzMERCZURia3c5SzJFOTlPaFdPNXNCZjFUY2U4dzhjY0xjYWZIRkYwekViWm9ieXhRS1pZMWVVR3U1b2c",
+            "black16pr":"https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYT3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=bXBlZlZsUzFiRGJCaytzamZ0akR1Z2tuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T3Vja1hnNlRzcUJGZGVaZU5qN0t6a0E",
+            "black16":"https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYY13?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=dmlrK2xBK3ZIL0RWcEZWRUx4VmNLd2tuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T2dOZDFJM0kzcS8rZDgybFJTRTZoK2c",
+            "black": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MK8Y4?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=Y3lXQk1pbTRPeFNjbWROY0VaWitBd2tuVHYzMERCZURia3c5SzJFOTlPaW9Ta3FTNGU3WUJlRUoxOUlMR1cwK2lqTk5BQlZRcmRKcFVqL1NFbXJhQXc",
+            "lake-green": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYH3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=V3dEblFoMFFrdHRScEI0WWk4bnFSUWtuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T1NzbGM4MkZOUkZqZHdOMkhDaDZkdHc",
+            "denim": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYU3?wid=2000&hei=2000&fmt=jpeg&qlt=90&.v=eXY4YWRVNVdScldQQlR6RGwxOUh6R2orYzFkTG5HaE9wejd5WUxYZjRMOHoveDdpQVpwS0ltY2w2UW05aU90T0tOWjZQdFA2TEZuNWxLUHNtNjIzbnc",
+            "light-pink15pr":"https://down-vn.img.susercontent.com/file/sg-11134201-7rbmc-lmk3igpbdg7fe3@resize_w900_nl.webp",
+            "light-pink15": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MT0U3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=N2ZKYXgxTXkxb1ptWXNQbGZNaUJZZ2tuVHYzMERCZURia3c5SzJFOTlPaFBPR1RmQ3R0Ulg1R1NoQmo2RXhEY3hQRWV5dW1Yblkyc0x3YlZ0WTdCQmc",
+            "datset":"https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MT0Q3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=aVdkbVp0OXBOeGtRd3FqMmJnbnd4UWtuVHYzMERCZURia3c5SzJFOTlPaFdPNXNCZjFUY2U4dzhjY0xjYWZIRlJydVYva1hUWkNWUG9QTVBQQlBudkE",
+            "XanhGiongTo":"https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MT0N3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=ZUoyTWFicU1MN0Z6QlNDMk9LUlJNd2tuVHYzMERCZURia3c5SzJFOTlPaFdPNXNCZjFUY2U4dzhjY0xjYWZIRndUNHc3RFQ5WU9idDFINm9nOVdOQWc",
+            "plum": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYW3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=RVF1WUQxZXIxK0t5UVgrL1ZXemI0QWtuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T3l5SkFUUWJBVnNpdGJwNTRmOTlUdVE",
+            "stone-gray": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYV3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=VnZUUDBINEI4b1ZTT0J4Rld6WGFjUWtuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T2d1ZEVTdkNNTEo1UEhZRjF5V2xscGc",
+            "product-red": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MPT63?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=NDhuaUhwQUg5SjF2ZUk2eWMvNVRZUWtuVHYzMERCZURia3c5SzJFOTlPaDk5cHI0Sk9QQ3N4N3RrQWt2VUEwNXZRNTl5ckY3VlVwNy9CNUI1Y3E5OHc",
+            "hoa-dang": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYE3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=VEs2YW53OHQxVzhITVNFZzhJY2NUd2tuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T3ovWVpqOFh5clQ2OWNkdkhkdzErUFE",
+            "ultramarine": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYF3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=MjRLY2thQmtHOEl5NFhZSi9YcUd2Z2tuVHYzMERCZURia3c5SzJFOTlPaVBpZElsODN6SXRvNXUyendNZGZ4SWpQSjc4Tm1pWHBZT2ZZam5uWVRaR0E",
+        }
 
         color_objs = []
         for c in colors_data:
@@ -72,7 +91,8 @@ class Command(BaseCommand):
                 "hex_code": c["hex"],
                 "secondary_hex": c["sec"],
                 "is_dark": c["dark"],
-                "order": c["order"]
+                "order": c["order"],
+                "image_url": color_image_map.get(c["slug"], "")
             }
             # Nếu slug nằm trong hidden_slugs thì đánh dấu is_hidden=True thay vì bỏ qua hoàn toàn
             if c["slug"] in hidden_slugs:
@@ -173,7 +193,7 @@ class Command(BaseCommand):
                 "stone-gray": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYV3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=VnZUUDBINEI4b1ZTT0J4Rld6WGFjUWtuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T2d1ZEVTdkNNTEo1UEhZRjF5V2xscGc",
                 "ultramarine": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYF3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=MjRLY2thQmtHOEl5NFhZSi9YcUd2Z2tuVHYzMERCZURia3c5SzJFOTlPaVBpZElsODN6SXRvNXUyendNZGZ4SWpQSjc4Tm1pWHBZT2ZZam5uWVRaR0E",
                 "product-red": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MPT63?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=NDhuaUhwQUg5SjF2ZUk2eWMvNVRZUWtuVHYzMERCZURia3c5SzJFOTlPaDk5cHI0Sk9QQ3N4N3RrQWt2VUEwNXZRNTl5ckY3VlVwNy9CNUI1Y3E5OHc",
-                "hoa-djang": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYE3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=VEs2YW53OHQxVzhITVNFZzhJY2NUd2tuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T3ovWVpqOFh5clQ2OWNkdkhkdzErUFE",
+                "hoa-dang": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYYE3?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=VEs2YW53OHQxVzhITVNFZzhJY2NUd2tuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T3ovWVpqOFh5clQ2OWNkdkhkdzErUFE",
             }
             product_cover_map = {
                 "op-lung-silicon-magsafe-iphone-16": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MYY93?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=YjBETWJveTlMYXhKelBweTdTcGtvUWtuVHYzMERCZURia3c5SzJFOTlPZ3oveDdpQVpwS0ltY2w2UW05aU90T2VlV3o2aUc2UTBlZGExYnQvOTJlcWc",
@@ -187,8 +207,8 @@ class Command(BaseCommand):
             model_color_map = {
                 "iPhone 16 Pro Max": ["black16pr", "denim", "plum", "stone-gray"],
                 "iPhone 16 Pro": ["black16pr", "denim", "plum", "stone-gray"],
-                "iPhone 16 Plus": ["black16", "lake-green", "ultramarine", "hoa-djang"],
-                "iPhone 16": ["black16", "lake-green", "ultramarine", "hoa-djang"],
+                "iPhone 16 Plus": ["black16", "lake-green", "ultramarine", "hoa-dang"],
+                "iPhone 16": ["black16", "lake-green", "ultramarine", "hoa-dang"],
                 "iPhone 15 Pro Max": ["black15pr", "light-pink15pr"],
                 "iPhone 15 Pro": ["black15pr", "light-pink15pr"],
                 "iPhone 15 Plus": ["black15", "light-pink15", "XanhGiongTo"],

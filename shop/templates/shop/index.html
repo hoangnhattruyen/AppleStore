@@ -36,6 +36,7 @@
           data-hero-color="{{ color.hex_code }}"
           data-hero-slug="{{ color.slug }}"
           data-hero-name="{{ color.name }} ({{ color.english_name }})"
+          data-hero-url="{{ color.image_url|default:'' }}"
           title="{{ color.name }}"
         >
           <span style="background-color: {{ color.hex_code }};"></span>
@@ -193,11 +194,14 @@
       const slug = btn.getAttribute('data-hero-slug');
       const name = btn.getAttribute('data-hero-name');
 
+      // Prefer URL provided by seed/admin, fallback to static path
+      const seededUrl = btn.getAttribute('data-hero-url');
+
       const heroImg = document.getElementById('heroCaseImage');
       if (heroImg && slug) {
         heroImg.style.opacity = '0.4';
         setTimeout(() => {
-          heroImg.src = `/static/images/cases/case-${slug}-back.png`;
+          heroImg.src = seededUrl && seededUrl.length ? seededUrl : `/static/images/cases/case-${slug}-back.png`;
           heroImg.style.opacity = '1';
         }, 120);
       }
