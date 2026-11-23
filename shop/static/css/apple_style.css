@@ -1108,4 +1108,11 @@ button {
   color: #ffffff;
   border-color: var(--apple-dark-gray);
 }
-
+/* Giới hạn số lượng màu trên thanh lọc */
+.color-filter-options .color-swatch-btn:nth-of-type(n+12):not(.active) {
+    display: none;
+}
+/* Mỗi sản phẩm chỉ hiển thị tối đa 6 màu */
+.product-color-swatches span:nth-of-type(n+7) {
+    display: none;
+}

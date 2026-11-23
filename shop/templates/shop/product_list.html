@@ -68,7 +68,7 @@
   <!-- Filter Bar: Màu sắc -->
   <div style="margin-bottom: 40px; padding: 16px 20px; background: var(--apple-light-gray); border-radius: var(--radius-md); display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
     <span style="font-size: 13px; font-weight: 600; color: var(--apple-text);">Lọc theo màu:</span>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+    <div class="color-filter-options" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
       <a href="{% url 'shop:product_list' %}{% if selected_model_slug %}?model={{ selected_model_slug }}{% endif %}" style="font-size:12px; color:{% if not selected_color_slug %}var(--apple-blue); font-weight:bold;{% else %}var(--apple-text-secondary);{% endif %}">
         Tất cả màu
       </a>
@@ -103,21 +103,36 @@
           >
         </div>
 
-        <!-- Color dots on card for instant color inspection -->
-        <div style="display:flex; gap:6px; justify-content:center; margin-bottom:14px;">
-          {% for variant in product.variants.all|dictsort:"color.order" %}
-            {% if variant.is_active %}
-              {% ifchanged variant.color.slug %}
+        
+        <!-- Color dots: Chỉ hiển thị màu theo dòng máy tương ứng -->
+        
+        <!-- Màu sắc riêng của từng sản phẩm -->
+        <div class="product-color-swatches"
+            style="display:flex; gap:7px; justify-content:center; margin-bottom:14px;">
+
+            {% for variant in product.display_variants %}
                 <span
-                  data-image-url="{{ variant.normalized_image_url }}"
-                  onclick="changeCardImage({{ product.id }}, '{{ variant.color.slug }}', '{{ variant.normalized_image_url|escapejs }}')"
-                  style="cursor:pointer; display:inline-block; width:14px; height:14px; border-radius:50%; background:{{ variant.color.hex_code }};"
-                  title="{{ variant.color.name }}"
+                    onclick="changeCardImage(
+                        {{ product.id }},
+                        '{{ variant.color.slug }}',
+                        '{{ variant.normalized_image_url|escapejs }}'
+                    )"
+                    style="
+                        cursor:pointer;
+                        display:inline-block;
+                        width:14px;
+                        height:14px;
+                        border-radius:50%;
+                        background-color:{{ variant.color.hex_code }};
+                        border:1px solid rgba(0,0,0,0.08);
+                    "
+                    title="{{ variant.color.name }}"
                 ></span>
-              {% endifchanged %}
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
+
         </div>
+
+
 
         <h3 class="product-card-title">{{ product.title }}</h3>
         <p class="product-card-desc">{{ product.short_description }}</p>

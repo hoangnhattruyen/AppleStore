@@ -136,7 +136,27 @@
           <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px;">
             {% for item in cart %}
               <div style="display: flex; gap: 12px; align-items: center;">
-                <img src="/static/images/cases/case-{{ item.color.slug }}-back.png" alt="{{ item.color.name }}" style="width: 32px; height: 50px; object-fit: contain; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.15)); flex-shrink:0;">
+                
+              {% if item.variant.normalized_image_url %}
+                  <img
+                      src="{{ item.variant.normalized_image_url }}"
+                      alt="{{ item.product.title }}"
+                      style="width: 45px; height: 60px; object-fit: contain; flex-shrink: 0;"
+                  >
+              {% elif item.product.image_url %}
+                  <img
+                      src="{{ item.product.image_url }}"
+                      alt="{{ item.product.title }}"
+                      style="width: 45px; height: 60px; object-fit: contain; flex-shrink: 0;"
+                  >
+              {% else %}
+                  <img
+                      src="{% static 'images/cases/case-lake-green-back.png' %}"
+                      alt="{{ item.product.title }}"
+                      style="width: 45px; height: 60px; object-fit: contain; flex-shrink: 0;"
+                  >
+              {% endif %}
+
                 <div style="flex:1;">
                   <div style="font-size: 13px; font-weight: 600; color: var(--apple-dark-gray);">{{ item.product.title }}</div>
                   <div style="font-size: 11px; color: var(--apple-text-secondary);">{{ item.phone_model.name }} • {{ item.color.name }} × {{ item.quantity }}</div>

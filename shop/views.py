@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from .models import PhoneModel, Color, Product, ProductVariant, Order, OrderItem, Review
 from .cart import Cart
 
@@ -28,22 +28,53 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 
+
 def product_list(request):
     selected_model_slug = request.GET.get('model', '')
     selected_color_slug = request.GET.get('color', '')
     search_query = request.GET.get('q', '').strip()
 
-    products = Product.objects.all().prefetch_related('variants__color', 'variants__phone_model')
+    selected_model = None
+
+    # Lấy danh sách sản phẩm và các biến thể
+    variant_queryset = ProductVariant.objects.filter(
+        is_active=True
+    ).select_related(
+        'color', 'phone_model'
+    ).order_by(
+        'color__order', 'phone_model__order'
+    )
+
+    products = Product.objects.prefetch_related(
+        Prefetch(
+            'variants',
+            queryset=variant_queryset,
+            to_attr='active_variants'
+        )
+    )
+
     phone_models = PhoneModel.objects.all().order_by('order')
 
-    selected_model = None
+    # Lọc theo dòng iPhone
     if selected_model_slug:
-        selected_model = get_object_or_404(PhoneModel, slug=selected_model_slug)
-        products = products.filter(variants__phone_model=selected_model).distinct()
+        selected_model = get_object_or_404(
+            PhoneModel,
+            slug=selected_model_slug
+        )
 
+        products = products.filter(
+            variants__phone_model=selected_model,
+            variants__is_active=True
+        ).distinct()
+
+    # Lọc theo màu sắc
     if selected_color_slug:
-        products = products.filter(variants__color__slug=selected_color_slug).distinct()
+        products = products.filter(
+            variants__color__slug=selected_color_slug,
+            variants__is_active=True
+        ).distinct()
 
+    # Tìm kiếm sản phẩm
     if search_query:
         products = products.filter(
             Q(title__icontains=search_query) |
@@ -51,8 +82,36 @@ def product_list(request):
             Q(description__icontains=search_query)
         ).distinct()
 
-    color_ids = ProductVariant.objects.filter(product__in=products, is_active=True).values_list('color_id', flat=True)
-    colors = Color.objects.filter(id__in=color_ids).distinct().order_by('order')
+    # Lọc danh sách màu hiển thị trên thanh bộ lọc
+    color_ids = ProductVariant.objects.filter(
+        product__in=products,
+        is_active=True
+    ).values_list('color_id', flat=True)
+
+    colors = Color.objects.filter(
+        id__in=color_ids,
+        is_hidden=False
+    ).distinct().order_by('order')
+
+    # Tạo danh sách màu riêng cho từng sản phẩm
+    for product in products:
+        display_variants = []
+        displayed_colors = set()
+
+        for variant in product.active_variants:
+
+            # Nếu đã chọn dòng máy thì chỉ lấy màu của dòng máy đó
+            if selected_model and variant.phone_model_id != selected_model.id:
+                continue
+
+            color_slug = variant.color.slug
+
+            # Không hiển thị màu trùng lặp
+            if color_slug not in displayed_colors:
+                display_variants.append(variant)
+                displayed_colors.add(color_slug)
+
+        product.display_variants = display_variants
 
     context = {
         'products': products,
@@ -63,7 +122,10 @@ def product_list(request):
         'selected_color_slug': selected_color_slug,
         'search_query': search_query,
     }
+
     return render(request, 'shop/product_list.html', context)
+
+
 
 
 def product_detail(request, slug):

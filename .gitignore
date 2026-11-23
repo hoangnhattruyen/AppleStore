@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+
+# Environment
+.env
+
+# Database
+db.sqlite3
+db_backup_before_supabase.sqlite3
+data.json
+
+# Logs
+*.log
+
+# Static files
+staticfiles/
